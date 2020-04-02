@@ -181,6 +181,12 @@ public class PaymentPhone extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CheckInput check = new CheckInput();
         long monsub = Long.parseLong((String) cbMoney.getSelectedItem());
+        if(check.inputPhone(jTextField1.getText())==null)
+           
+        {
+           JOptionPane.showMessageDialog(this, "Number phone dose not exits!!");
+           return;
+        }
         if (monsub > Long.parseLong(Entity.getMoney())) {
             JOptionPane.showMessageDialog(this, "Not enough money!!!");
             return;

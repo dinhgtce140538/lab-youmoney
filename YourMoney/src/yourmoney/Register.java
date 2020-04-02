@@ -36,18 +36,18 @@ import server.AllMethods;
  * @author Admin
  */
 public class Register extends javax.swing.JFrame {
-    
+
     AllMethods med = null;
 
     /**
      * Creates new form Register
      */
     public Register() {
-        
+
         initComponents();
         try {
             med = (AllMethods) Naming.lookup("rmi://localhost:3006/YourMoney");
-            
+
         } catch (MalformedURLException | NotBoundException | RemoteException ex) {
             System.out.println(ex);
         }
@@ -464,10 +464,10 @@ public class Register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_MaleActionPerformed
     public class MailConfig {
-        
+
         Register r = new Register();
         public static final String HOST_NAME = "smtp.gmail.com";
-        
+
         public static final int SSL_PORT = 465; // Port for SSL
 
         public static final int TSL_PORT = 587; // Port for TLS/STARTTLS
@@ -477,29 +477,29 @@ public class Register extends javax.swing.JFrame {
         public static final String APP_PASSWORD = "3135134162313Vn"; // your password
 
     }
-    
+
     public boolean OTP(String toEmail) {
-        
+
         String password = "";
-        
+
         Properties props = new Properties();
         String Capital_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        
+
         String numbers = "0123456789";
-        
+
         String values = Capital_chars
                 + numbers;
 
         // Using random method 
         Random rndm_method = new Random();
-        
+
         for (int i = 0; i < 6; i++) {
             // Use of charAt() method : to get character value 
             // Use of nextInt() as it is scanning the value as int 
             password += values.charAt(rndm_method.nextInt(values.length()));
-            
+
         }
-        
+
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.host", OTP.MailConfig.HOST_NAME);
         props.put("mail.smtp.starttls.enable", "true");
@@ -524,12 +524,13 @@ public class Register extends javax.swing.JFrame {
             Transport.send(message);
             JOptionPane.showMessageDialog(this, "Message sent successfully");
             while (true) {
-                
+
                 String str = JOptionPane.showInputDialog(this, "Enter OTP code");
                 if (str.equalsIgnoreCase(password)) {
                     return true;
                 } else {
                     JOptionPane.showMessageDialog(this, "Wrong OTP");
+                   
                 }
             }
         } catch (MessagingException e) {
@@ -537,7 +538,7 @@ public class Register extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     public String generateCode() {
         String numbers = "0123456789";
         String code = "30062000";
@@ -549,16 +550,16 @@ public class Register extends javax.swing.JFrame {
         }
         return code;
     }
-    
+
     public boolean checkUser(String user, String pass, String mail, String gend, String addre, String nm, String phone, String dob) {
         CheckInput check = new CheckInput();
         int counterror = 0;
-        
+
         if (user.isEmpty()) {
             lblDupUsername.setText("Username cannot null!!!");
             counterror += 1;
         }
-        
+
         if (mail.isEmpty()) {
             lblDupEmail.setText("Email cannot null!!!");
             counterror += 1;
@@ -592,17 +593,30 @@ public class Register extends javax.swing.JFrame {
         if (!check.inputDOB(dob)) {
             lblWrongDOB.setText("Invalid Date!!!");
         }
+        if (user.equals("admin")) {
+            lblDupUsername.setText("Username already exits!!!");
+            counterror += 1;
+
+        }
+        try {
+            if (!med.dupUsername(user)) {
+                lblDupUsername.setText("Username already!!!");
+                counterror += 1;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (counterror > 0) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     public static String encoder(String password) {
         //create varable to store password be encodered
         String generatedPassword = null;
-        
+
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(password.getBytes());
@@ -612,7 +626,7 @@ public class Register extends javax.swing.JFrame {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             generatedPassword = sb.toString();
-            
+
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -635,22 +649,32 @@ public class Register extends javax.swing.JFrame {
         if (!checkUser(user, pass, mail, gend, addre, nm, phone, dob)) {
             return;
         }
-        
+        lblDupUsername.setText("");
+        lblDupEmail.setText("");
+        lblNonGender.setText("");
+        lblNullAddress.setText("");
+        lblWrongDOB.setText("");
+        lblNullName.setText("");
+        lblNullPhone.setText("");
+        lblWrongPass.setText("");
+
+        if (!OTP(mail)) {
+            return;
+        }
         try {
+
             if (med.Register(user, pass, mail, gend, addre, nm, phone, dob, code)) {
-                if (!OTP(mail)) {
-                    return;
-                }
+
                 JOptionPane.showMessageDialog(this, "Register Complete!!!");
                 l.setVisible(true);
                 l.pack();
                 l.setLocationRelativeTo(null);
                 this.dispose();
             } else {
-                lblDupUsername.setText("Username already!!!");
+                JOptionPane.showMessageDialog(this, "Cannot Register!!!");
                 return;
             }
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -673,7 +697,7 @@ public class Register extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (txtOTP.getText().equals(password)) {
             JOptionPane.showMessageDialog(this, "Login Successful!!");
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "Login Fail!!");
         }    }//GEN-LAST:event_jButton1ActionPerformed
@@ -736,21 +760,21 @@ public class Register extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Register.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Register.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(Register.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Register.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);

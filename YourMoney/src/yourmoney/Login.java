@@ -42,12 +42,12 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         try {
-            med = (AllMethods) Naming.lookup("rmi://localhost:3006/YourMoney");
+            med =  (AllMethods) Naming.lookup("rmi://localhost:3006/YourMoney");
 
         } catch (MalformedURLException | NotBoundException | RemoteException ex) {
+            JOptionPane.showMessageDialog(this,"Server down!!!");
             System.out.println(ex);
         }
-       
 
     }
 
@@ -67,6 +67,7 @@ public class Login extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         lblWrongusername = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jDialog2 = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -112,6 +113,14 @@ public class Login extends javax.swing.JFrame {
 
         lblWrongusername.setForeground(new java.awt.Color(255, 0, 0));
 
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/yourmoney/Arrow-Back-icon.png"))); // NOI18N
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -128,14 +137,21 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(lblWrongusername, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(68, 68, 68))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(167, 167, 167)
-                .addComponent(jButton4)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addComponent(jButton4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel11)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addContainerGap()
+                .addComponent(jLabel11)
+                .addGap(66, 66, 66)
                 .addComponent(jLabel7)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -145,7 +161,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(lblWrongusername, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
@@ -451,6 +467,10 @@ public class Login extends javax.swing.JFrame {
             ad.pack();
             ad.setLocationRelativeTo(null);
             this.dispose();
+        } else if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username cannot null!!", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Password cannot null!!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             password = encoder(password);
             try {
@@ -554,30 +574,26 @@ public class Login extends javax.swing.JFrame {
         String confirmpass = String.valueOf(txtConfirmPassword.getPassword());
         JTextField UsernameForget = getTxtUsernameForget();
         String user = UsernameForget.getText();
+        System.out.println(user+"asdasd");
         if (!password.equals(confirmpass)) {
             lblComfirm.setText("Password confirm not match!!!");
             return;
         }
         try {
-            password = encoder(password);
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/YourMoney", "root", "");
-            PreparedStatement st = conn.prepareStatement("UPDATE `user` SET `Password`=? WHERE `Username`=?");
-
-            st.setString(1, password);
-            st.setString(2, user);
-
-            int count = st.executeUpdate();
-            if (count > 0) {
-                JOptionPane.showMessageDialog(this, "Change Password Complete!!!!");
-                Login l = new Login();
+            confirmpass=Login.encoder(confirmpass);
+            if(med.forgetPass(user, confirmpass)){
+                JOptionPane.showMessageDialog(this, "Change Password Complete!!!");
+                Login l=new Login();
                 l.setVisible(true);
-                l.pack();
                 l.setLocationRelativeTo(null);
-                jDialog2.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "Change password Fail!!!");
+                l.pack();
+                jDialog2.dispose();
             }
-        } catch (SQLException ex) {
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Cannot change password now!!!");
+            }
+        } catch (RemoteException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -590,6 +606,16 @@ public class Login extends javax.swing.JFrame {
     private void jButton1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1KeyTyped
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        Login l = new Login();
+        l.setVisible(true);
+        l.pack();
+        l.setLocationRelativeTo(null);
+        jDialog1.dispose();
+
+
+    }//GEN-LAST:event_jLabel11MouseClicked
 
     /**
      * @param args the command line arguments
@@ -641,6 +667,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

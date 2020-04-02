@@ -80,6 +80,7 @@ public class ChangeInformation extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblInvalidDate = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        lblGender = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,6 +178,9 @@ public class ChangeInformation extends javax.swing.JFrame {
             }
         });
 
+        lblGender.setForeground(new java.awt.Color(255, 0, 0));
+        lblGender.setText(" ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -215,20 +219,22 @@ public class ChangeInformation extends javax.swing.JFrame {
                                         .addComponent(jLabel25)
                                         .addComponent(gender))
                                     .addGap(62, 62, 62)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtChangeAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(Male)
-                                            .addGap(127, 127, 127)
-                                            .addComponent(Female))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(cbBoxDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(cbBoxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(cbBoxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(lblNullName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblInvalidDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblGender, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtChangeAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(Male)
+                                                .addGap(127, 127, 127)
+                                                .addComponent(Female))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(cbBoxDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(cbBoxMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(cbBoxYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(lblNullName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(lblInvalidDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
@@ -269,11 +275,13 @@ public class ChangeInformation extends javax.swing.JFrame {
                     .addComponent(Male)
                     .addComponent(Female)
                     .addComponent(gender))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblGender)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtChangeAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(address))
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblNulladdress)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -289,7 +297,7 @@ public class ChangeInformation extends javax.swing.JFrame {
                 .addComponent(lblNullPhone)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -323,6 +331,13 @@ public class ChangeInformation extends javax.swing.JFrame {
     }//GEN-LAST:event_MaleActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         lblNullName.setText("");
+         lblNullEmail.setText("");
+         lblNullPhone.setText("");
+         lblNulladdress.setText("");
+         lblInvalidDate.setText("");
+         lblGender.setText("");
+         
         CheckInput check = new CheckInput();
         Register r = new Register();
         
@@ -343,12 +358,14 @@ public class ChangeInformation extends javax.swing.JFrame {
             counterror += 1;
         } else if (check.inputEmail(Email) == null) {
             lblNullEmail.setText("Email dose not exits!!!!");
+            counterror += 1;
         }
         if (Phone == null) {
             lblNullPhone.setText("Phone cannot null!!!");
             counterror += 1;
         } else if (check.inputPhone(Phone) == null) {
             lblNullPhone.setText("Phone dose not exits!!!!");
+            counterror += 1;
         }
         if (addressc == null) {
             lblNulladdress.setText("Address cannot null!!!");
@@ -358,10 +375,15 @@ public class ChangeInformation extends javax.swing.JFrame {
             lblInvalidDate.setText("Date Invalid!!!");
             counterror += 1;
         }
-
+        if(!Male.isSelected() && !Female.isSelected())
+        {
+            lblGender.setText("Please choose Gender");
+            counterror+=1;
+        }
         if (counterror > 0) {
             return;
         }
+        
         
         try {
             if (med.ChangeInformation(Fullname, dob, gend, addressc, Email, Phone, Entity.getUsername())) {
@@ -445,6 +467,7 @@ public class ChangeInformation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblInvalidDate;
     private javax.swing.JLabel lblNullEmail;
     private javax.swing.JLabel lblNullName;

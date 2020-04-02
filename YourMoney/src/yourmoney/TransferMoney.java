@@ -201,21 +201,24 @@ public class TransferMoney extends javax.swing.JFrame {
         long usermoney;
         long monsub;
         long lastmoneyuser;
-        if(code.isEmpty())
-        {
+        if (code.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Code cannot null!!");
             return;
-        }
-        else if(lblNameCode.getText().isEmpty())
-        {
+        } else if (code.equals(Entity.getCode())) {
+            JOptionPane.showMessageDialog(this, "Code cannot null!!");
+            return;
+        } else if (lblNameCode.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please check code first!!!");
             return;
         }
         
         if (check.checkNumber(txtMoney.getText())) {
-            if(Long.parseLong(txtMoney.getText())>20000000)
-            {
+            if (Long.parseLong(txtMoney.getText()) > 20000000) {
                 JOptionPane.showMessageDialog(this, "Limit transaction 20.000.000/trade");
+                return;
+            }
+             if (Long.parseLong(txtMoney.getText()) < 50000) {
+                JOptionPane.showMessageDialog(this, "Minumun transaction 50.000/trade");
                 return;
             }
             if (!r.OTP(Entity.getEmail())) {
@@ -228,6 +231,11 @@ public class TransferMoney extends javax.swing.JFrame {
                     Entity.setMoney(String.valueOf(lastmoneyuser));
                     if (med.transferMoney(code, String.valueOf(lastmoneyuser), String.valueOf(monsub), Entity.getUsername(), "Transfer money with code")) {
                         JOptionPane.showMessageDialog(this, "Transfer complete!!!");
+                        Shop s=new Shop();
+                        s.setVisible(true);
+                        s.pack();
+                        s.setLocationRelativeTo(null);
+                        this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(this, "Transfer money fail!!!");
                     }
@@ -245,10 +253,9 @@ public class TransferMoney extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String code = txtCode.getText();
         ResultSet rs = null;
-        if(code.equals(Entity.getCode()))
-        {
+        if (code.equals(Entity.getCode())) {
             JOptionPane.showMessageDialog(this, "It is your code!!!");
-            return ;
+            return;
         }
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

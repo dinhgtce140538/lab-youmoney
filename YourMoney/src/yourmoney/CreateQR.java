@@ -164,7 +164,7 @@ public class CreateQR extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        Shop mm = new Shop();
+        MainMenu mm = new MainMenu();
         mm.setVisible(true);
         mm.pack();
         mm.setLocationRelativeTo(null);

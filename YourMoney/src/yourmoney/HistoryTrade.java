@@ -289,7 +289,7 @@ public class HistoryTrade extends javax.swing.JFrame {
             exporttable = new XSSFWorkbook();
 
             XSSFSheet sheet = exporttable.createSheet("Report User");
-            String[] tital = {"Trade No", "Payment", "Time", "Gender", "Money"};
+            String[] tital = {"Trade No", "Payment", "Time", "Money", "Note"};
             XSSFCell cell = null;
             XSSFRow row = sheet.createRow(0);
             for (int i = 0; i < model.getColumnCount(); i++) {
@@ -297,6 +297,7 @@ public class HistoryTrade extends javax.swing.JFrame {
                 cell.setCellValue(tital[i]);
             }
             for (int i = 1; i < model.getRowCount(); i++) {
+                System.out.println(i);
                 row = sheet.createRow(i);
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     cell = row.createCell(j);

@@ -231,6 +231,9 @@ public class TransfersMoneyQR extends javax.swing.JFrame {
         if (code.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please choose QR code!!!");
             return;
+        } else if (code.equals(Entity.getCode())) {
+            JOptionPane.showMessageDialog(this, "It is your code!!!");
+            return;
         }
         long usermoney;
         long monsub;
@@ -285,11 +288,12 @@ public class TransfersMoneyQR extends javax.swing.JFrame {
 
             try {
                 String code = decodeQRCode(f);
+                txtCode.setText(code);
                 if (code.equals(Entity.getCode())) {
                     JOptionPane.showMessageDialog(this, "It is your code!!!");
                     return;
                 }
-                txtCode.setText(code);
+
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 Connection conn = DriverManager.getConnection("jdbc:sqlserver://MSI; databaseName=YourMoney;", "sa", "123");
                 PreparedStatement st = conn.prepareStatement("Select Name From Account Where Code=?");
